@@ -7,10 +7,10 @@
 namespace DanskernesDigitaleBibliotek\AgencyAuthBundle\Tests;
 
 use DanskernesDigitaleBibliotek\AgencyAuthBundle\DanskernesDigitaleBibliotekAgencyAuthBundle;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpClient\CurlHttpClient;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**

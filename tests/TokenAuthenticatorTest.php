@@ -362,7 +362,6 @@ class TokenAuthenticatorTest extends TestCase
         $this->assertNull($user, 'TokenAuthenticator should return null when client is not on allow list');
     }
 
-
     /**
      * Helper function to setup TokenAuthenticator with/without allowed clients.
      *

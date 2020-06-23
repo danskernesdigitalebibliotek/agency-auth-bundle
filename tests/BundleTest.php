@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 class BundleTest extends TestCase
 {
     /**
-     * Test service wirring
+     * Test service wirring.
      */
     public function testServiceWiring()
     {
