@@ -39,19 +39,26 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      * TokenAuthenticator constructor.
      *
      * @param string $openplatformId
+     *   Open Platform id
      * @param string $openplatformSecret
+     *   Open Platform secret
      * @param string $openplatformIntrospectionUrl
-     * @param array $openplatformAllowedCLients
+     *   Open Platform introspection URL
+     * @param array $openplatformAllowedClients
+     *   An allow list of client id's. Supply an empty array to allow all.
      * @param HttpClientInterface $httpClient
+     *   Http client for calls to Open Platform
      * @param AdapterInterface|null $tokenCache
+     *   Cache Adapter for caching tokens/users
      * @param LoggerInterface|null $logger
+     *   Logger for error logging
      */
-    public function __construct(string $openplatformId, string $openplatformSecret, string $openplatformIntrospectionUrl, array $openplatformAllowedCLients, HttpClientInterface $httpClient, AdapterInterface $tokenCache = null, LoggerInterface $logger = null)
+    public function __construct(string $openplatformId, string $openplatformSecret, string $openplatformIntrospectionUrl, array $openplatformAllowedClients, HttpClientInterface $httpClient, AdapterInterface $tokenCache = null, LoggerInterface $logger = null)
     {
         $this->clientId = $openplatformId;
         $this->clientSecret = $openplatformSecret;
         $this->endPoint = $openplatformIntrospectionUrl;
-        $this->allowedClients = $openplatformAllowedCLients;
+        $this->allowedClients = $openplatformAllowedClients;
 
         $this->client = $httpClient;
         $this->cache = $tokenCache;
@@ -98,7 +105,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }
 
         // Confirm that user's client id is allowed.
-        if ($this->allowedClients && !in_array($user->getClientId(), $this->allowedClients)) {
+        if (!empty($this->allowedClients) && !in_array($user->getClientId(), $this->allowedClients)) {
             return null;
         }
 
@@ -225,8 +232,10 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      * Get user from cache.
      *
      * @param string $token
+     *   The auth token
      *
      * @return User|null
+     *   The cached User or null
      */
     private function getCachedUser(string $token): ?User
     {
@@ -253,10 +262,12 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      * Get user data from introspection endpoint.
      *
      * @param string $token
+     *   The auth token
      *
-     * @return stdClass|null
+     * @return \stdClass|null
+     *   A stdClass object with user data or null
      */
-    private function fetchUserData(string $token): ?stdClass
+    private function fetchUserData(string $token): ?\stdClass
     {
         try {
             $response = $this->client->request(
@@ -268,7 +279,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             );
 
             if (200 !== $response->getStatusCode()) {
-                $this->logError('http call to Open Platform returned status: '.$response->getStatusCode());
+                $this->logError('Http call to Open Platform returned status: '.$response->getStatusCode());
 
                 return null;
             }
@@ -278,14 +289,14 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
             // Error from Open Platform
             if (isset($data->error)) {
-                $this->logError('token call to Open Platform returned error: '.$data->error);
+                $this->logError('Token call to Open Platform returned error: '.$data->error);
 
                 return null;
             }
 
             // Unknown format/token type
             if (isset($data->type) && 'anonymous' !== $data->type) {
-                $this->logError(' token call to Open Platform returned unknown type: '.$data->type);
+                $this->logError('Token call to Open Platform returned unknown type: '.$data->type);
 
                 return null;
             }
@@ -296,16 +307,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             }
 
             return $data;
-        } catch (HttpExceptionInterface $e) {
-            $this->logger->error(self::class.' http exception: '.$e->getMessage());
-
-            return null;
-        } catch (\JsonException $e) {
-            $this->logger->error(self::class.' json decode exception: '.$e->getMessage());
-
-            return null;
-        } catch (Exception $e) {
-            $this->logger->error(self::class.' exception: '.$e->getMessage());
+        } catch (\Exception $e) {
+            $this->logException($e);
 
             return null;
         }
@@ -314,14 +317,17 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * Create user object from introspection data.
      *
-     * @param stdClass $userData
+     * @param \stdClass $userData
+     *   A stdClass object with user data
      * @param string $token
+     *   The auth token
      *
      * @return User
+     *   A User object
      *
-     * @throws Exception
+     * @throws \Exception
      */
-    private function createUser(stdClass $userData, string $token): User
+    private function createUser(\stdClass $userData, string $token): User
     {
         // E.g. "expires": "2020-07-04T05:36:24.083Z",
         $tokenExpireDataTime = new \DateTime($userData->expires);
@@ -340,6 +346,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      * Log error if a logger is configured.
      *
      * @param string $message
+     *   The message to log
      */
     private function logError(string $message): void
     {
@@ -351,9 +358,10 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * Log exception.
      *
-     * @param Exception $e
+     * @param \Exception $e
+     *   The Exception to log
      */
-    private function logException(Exception $e): void
+    private function logException(\Exception $e): void
     {
         $message = get_class($e).' '.$e->getMessage();
         $this->logError($message);

@@ -6,7 +6,6 @@
 
 namespace DanskernesDigitaleBibliotek\AgencyAuthBundle\Security;
 
-use DateTime;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -23,9 +22,9 @@ class User implements UserInterface
     /**
      * Get this users "password" expire date.
      *
-     * @return DateTime|null
+     * @return \DateTime|null
      */
-    public function getExpires(): ?DateTime
+    public function getExpires(): ?\DateTime
     {
         return $this->expires;
     }
@@ -33,9 +32,9 @@ class User implements UserInterface
     /**
      * Set this users "password" expire date.
      *
-     * @param DateTime $expires
+     * @param \DateTime $expires
      */
-    public function setExpires(DateTime $expires): void
+    public function setExpires(\DateTime $expires): void
     {
         $this->expires = $expires;
     }
