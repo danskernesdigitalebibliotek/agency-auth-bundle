@@ -46,60 +46,6 @@ class TokenAuthenticatorTest extends TestCase
     }
 
     /**
-     * Helper function to setup TokenAuthenticator with/without allowed clients.
-     *
-     * @param array $allowedClients
-     *
-     * @return TokenAuthenticator
-     */
-    private function getTokenAuthenticator(array $allowedClients)
-    {
-        return new TokenAuthenticator('id', 'secret', 'https://auth.test', $allowedClients, $this->httpClient, $this->cache, $this->logger);
-    }
-
-    /**
-     * Helper function to get mock user response.
-     *
-     * @param bool $active
-     * @param string $expiresStr
-     * @param string $clientId
-     * @param string $type
-     *
-     * @return ResponseInterface
-     *
-     * @throws Exception
-     */
-    private function getMockUserResponse(int $httpStatus, bool $active, string $expiresStr, string $clientId, string $type): ResponseInterface
-    {
-        $response = $this->createMock(ResponseInterface::class);
-        $response->method('getStatusCode')->willReturn($httpStatus);
-        $expires = new \DateTime($expiresStr, new \DateTimeZone('UTC'));
-        $json = '{
-            "active": '.$active.',
-            "clientId": "'.$clientId.'",
-            "expires": "'.$expires->format('Y-m-d\TH:i:s.u\Z').'",
-            "agency": "123456",
-            "uniqueId": null,
-            "search": {
-                "profile": "abcd",
-                "agency": "123456"
-            },
-            "type": "'.$type.'",
-            "name": "DDB CMS",
-            "contact": {
-                "owner": {
-                    "name": "Hans Hansen",
-                    "email": "hans@hansen.dk",
-                    "phone": "11 22 33 44"
-                }
-            }
-        }';
-        $response->method('getContent')->willReturn($json);
-
-        return $response;
-    }
-
-    /**
      * Tests functions.
      */
     public function testTokenAuthenticatorFunctions(): void
@@ -414,5 +360,61 @@ class TokenAuthenticatorTest extends TestCase
 
         $user = $this->tokenAuthenticator->getUser('Bearer 12345678', $this->userProvider);
         $this->assertNull($user, 'TokenAuthenticator should return null when client is not on allow list');
+    }
+
+
+    /**
+     * Helper function to setup TokenAuthenticator with/without allowed clients.
+     *
+     * @param array $allowedClients
+     *
+     * @return TokenAuthenticator
+     */
+    private function getTokenAuthenticator(array $allowedClients)
+    {
+        return new TokenAuthenticator('id', 'secret', 'https://auth.test', $allowedClients, $this->httpClient, $this->cache, $this->logger);
+    }
+
+    /**
+     * Helper function to get mock user response.
+     *
+     * @param int $httpStatus
+     * @param bool $active
+     * @param string $expiresStr
+     * @param string $clientId
+     * @param string $type
+     *
+     * @return ResponseInterface
+     *
+     * @throws Exception
+     */
+    private function getMockUserResponse(int $httpStatus, bool $active, string $expiresStr, string $clientId, string $type): ResponseInterface
+    {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getStatusCode')->willReturn($httpStatus);
+        $expires = new \DateTime($expiresStr, new \DateTimeZone('UTC'));
+        $json = '{
+            "active": '.$active.',
+            "clientId": "'.$clientId.'",
+            "expires": "'.$expires->format('Y-m-d\TH:i:s.u\Z').'",
+            "agency": "123456",
+            "uniqueId": null,
+            "search": {
+                "profile": "abcd",
+                "agency": "123456"
+            },
+            "type": "'.$type.'",
+            "name": "DDB CMS",
+            "contact": {
+                "owner": {
+                    "name": "Hans Hansen",
+                    "email": "hans@hansen.dk",
+                    "phone": "11 22 33 44"
+                }
+            }
+        }';
+        $response->method('getContent')->willReturn($json);
+
+        return $response;
     }
 }
