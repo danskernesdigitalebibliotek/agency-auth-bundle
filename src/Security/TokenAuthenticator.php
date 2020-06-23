@@ -6,15 +6,13 @@
 
 namespace DanskernesDigitaleBibliotek\AgencyAuthBundle\Security;
 
-use Exception;
+use DanskernesDigitaleBibliotek\AgencyAuthBundle\Exception\UnsupportedCredentialsTypeException;
 use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
-use stdClass;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -160,10 +158,13 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * Get the bearer token from credentials.
      *
-     * @param $credentials
+     * @param mixed $credentials
+     *   Request credentials
      *
      * @return string|null
      *   Token string if found, null if no token or empty credentials
+     *
+     * @throws UnsupportedCredentialsTypeException
      */
     private function getToken($credentials): ?string
     {
@@ -174,19 +175,24 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         }
 
         // Parse token information from the bearer authorization header.
-        preg_match('/Bearer\s(\w+)/', $credentials, $matches);
-        if (2 !== count($matches)) {
-            return null;
+        if (is_string($credentials) && 1 === preg_match('/Bearer\s(\w+)/', $credentials, $matches)) {
+            if (2 !== count($matches)) {
+                return null;
+            }
+
+            return $matches[1];
         }
 
-        return $matches[1];
+        throw new UnsupportedCredentialsTypeException('Only credentials of type string (e.g. bearer authorization header) supported');
     }
 
     /**
-     * Cache user.
+     * Cache user if cache is configured.
      *
      * @param User $user
+     *   The user object to cache
      * @param string $token
+     *   The auth token to use as cache key
      */
     private function cacheUser(User $user, string $token): void
     {
