@@ -17,7 +17,9 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 class DanskernesDigitaleBibliotekAgencyAuthExtension extends Extension
 {
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -43,7 +45,9 @@ class DanskernesDigitaleBibliotekAgencyAuthExtension extends Extension
         }
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function getAlias()
     {
         return 'ddb_agency_auth';

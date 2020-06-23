@@ -229,6 +229,8 @@ class TokenAuthenticatorTest extends TestCase
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn(200);
         $expires = new \DateTime('now + 2 days', new \DateTimeZone('UTC'));
+
+        // Test is for invalid json, hence "active": true,error
         $json = '{
             "active": true,error
             "clientId": "client-id-hash",
@@ -254,11 +256,11 @@ class TokenAuthenticatorTest extends TestCase
         $this->httpClient->method('request')->willReturn($response);
 
         $user = $this->tokenAuthenticator->getUser('Bearer 12345678', $this->userProvider);
-        $this->assertNull($user, 'TokenAuthenticator should return null (access denied) if error received from Open Platform');
+        $this->assertNull($user, 'TokenAuthenticator should return null (access denied) if invalid json received from Open Platform');
     }
 
     /**
-     * Test that access granted if user is 'active' in Open Platform.
+     * Test that access granted if user is valid Open Platform token supplied.
      *
      * @throws Exception
      */
@@ -346,7 +348,6 @@ class TokenAuthenticatorTest extends TestCase
      * Test that null is returned when client is NOT on client allow list.
      *
      * @throws Exception
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function testAgencyShouldNotBeAllowed(): void
     {
@@ -366,8 +367,10 @@ class TokenAuthenticatorTest extends TestCase
      * Helper function to setup TokenAuthenticator with/without allowed clients.
      *
      * @param array $allowedClients
+     *   An allow list of client id's. Supply an empty array to allow all.
      *
      * @return TokenAuthenticator
+     *   A configured TokenAuthenticator
      */
     private function getTokenAuthenticator(array $allowedClients)
     {
@@ -378,12 +381,18 @@ class TokenAuthenticatorTest extends TestCase
      * Helper function to get mock user response.
      *
      * @param int $httpStatus
+     *   The http status code for the response
      * @param bool $active
+     *   Is the user active in Open Platform
      * @param string $expiresStr
+     *   The expire time of the token
      * @param string $clientId
+     *   The users client id
      * @param string $type
+     *   The users type
      *
      * @return ResponseInterface
+     *   A mock response with a json user object as content
      *
      * @throws Exception
      */

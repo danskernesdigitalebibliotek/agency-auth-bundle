@@ -18,7 +18,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class DanskernesDigitaleBibliotekAgencyAuthBundleTestingKernel extends Kernel
 {
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function registerBundles()
     {
         return [
@@ -26,7 +28,9 @@ class DanskernesDigitaleBibliotekAgencyAuthBundleTestingKernel extends Kernel
         ];
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(function (ContainerBuilder $containerBuilder) {
