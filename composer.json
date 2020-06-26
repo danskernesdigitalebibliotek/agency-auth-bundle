@@ -31,6 +31,7 @@
     "symfony/security": "^4.4"
   },
   "require-dev": {
+    "drenso/phan-extensions": "^3.1",
     "escapestudios/symfony2-coding-standard": "^3.10",
     "friendsofphp/php-cs-fixer": "^2.13",
     "phan/phan": "^3.0",
