@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "045657bad57d66982fd0d1cb158fab60",
+    "content-hash": "93cc78271382ba6c19daf25867f45ca5",
     "packages": [
         {
             "name": "psr/container",
@@ -2555,6 +2555,50 @@
                 }
             ],
             "time": "2020-05-25T17:44:05+00:00"
+        },
+        {
+            "name": "drenso/phan-extensions",
+            "version": "v3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Drenso/PhanExtensions.git",
+                "reference": "639169d38f4508ce9d1aa7136f7a472a1d71a683"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Drenso/PhanExtensions/zipball/639169d38f4508ce9d1aa7136f7a472a1d71a683",
+                "reference": "639169d38f4508ce9d1aa7136f7a472a1d71a683",
+                "shasum": ""
+            },
+            "require-dev": {
+                "phan/phan": "~2|~3"
+            },
+            "type": "project",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bob van de Vijver",
+                    "email": "bob@drenso.nl"
+                },
+                {
+                    "name": "Tobias Feijten",
+                    "email": "tobias@drenso.nl"
+                }
+            ],
+            "description": "This project contains several extensions (stubs/plugins) to be used with Phan for static PHP analysis",
+            "homepage": "https://github.com/Drenso/PhanExtensions",
+            "keywords": [
+                "phan",
+                "plugin",
+                "plugins",
+                "stub",
+                "stubs",
+                "symfony"
+            ],
+            "time": "2020-06-17T08:01:34+00:00"
         },
         {
             "name": "escapestudios/symfony2-coding-standard",
