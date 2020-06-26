@@ -1,7 +1,6 @@
 {
   "name": "danskernesdigitalebibliotek/agency-auth-bundle",
   "license": "AGPL-3.0-only",
-  "version": "0.1.0",
   "type": "symfony-bundle",
   "description": "Agency authentication against the Open Platform",
   "autoload": {
