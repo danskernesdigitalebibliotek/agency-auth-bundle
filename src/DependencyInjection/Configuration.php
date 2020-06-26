@@ -26,7 +26,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('openplatform_id')->defaultValue('my_id')->end()
                 ->scalarNode('openplatform_secret')->defaultValue('my_secret')->end()
                 ->scalarNode('openplatform_introspection_url')->defaultValue('https://login.bib.dk/oauth/introspection')->end()
-                ->arrayNode('openplatform_allowed_clients')->scalarPrototype()->end()->end()
+                ->scalarNode('openplatform_allowed_clients')->defaultValue('')->end()
                 ->scalarNode('http_client')->defaultValue('Symfony\Contracts\HttpClient\HttpClientInterface')->end()
                 ->scalarNode('auth_token_cache')->defaultNull()->end()
                 ->scalarNode('auth_logger')->defaultNull()->end()
