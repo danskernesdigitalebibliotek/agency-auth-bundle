@@ -58,7 +58,8 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
         $this->clientId = $openplatformId;
         $this->clientSecret = $openplatformSecret;
         $this->endPoint = $openplatformIntrospectionUrl;
-        $this->allowedClients = empty($openplatformAllowedClients) ? [] : explode(',', $openplatformAllowedClients);
+
+        $this->allowedClients = empty($openplatformAllowedClients) ? [] : array_map('trim', explode(',', $openplatformAllowedClients));
 
         $this->client = $httpClient;
         $this->cache = $tokenCache;

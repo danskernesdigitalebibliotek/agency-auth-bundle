@@ -287,14 +287,14 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testCachedTokensClientIsAllowed(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator('allowed-client-id');
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('allowed-client-id-1, allowed-client-id-2, allowed-client-id-3');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->cache->expects($this->once())->method('getItem')->with('12345678');
 
         $this->item->method('isHit')->willReturn(true);
         $user = new User();
-        $user->setClientId('allowed-client-id');
+        $user->setClientId('allowed-client-id-2');
         $expires = new \DateTime('now + 2 days', new \DateTimeZone('UTC'));
         $user->setExpires($expires);
         $this->item->method('get')->willReturn($user);
