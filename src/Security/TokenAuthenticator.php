@@ -7,7 +7,6 @@
 namespace DanskernesDigitaleBibliotek\AgencyAuthBundle\Security;
 
 use DanskernesDigitaleBibliotek\AgencyAuthBundle\Exception\UnsupportedCredentialsTypeException;
-use Psr\Cache\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -223,7 +222,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
                 // Store access token in local cache.
                 $item->set($user);
                 $this->cache->save($item);
-            } catch (InvalidArgumentException $e) {
+            } catch (\Exception $e) {
                 $this->logException($e);
             }
         }
@@ -251,7 +250,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
                     return $user;
                 }
-            } catch (InvalidArgumentException $e) {
+            } catch (\Exception $e) {
                 $this->logException($e);
             }
         }
