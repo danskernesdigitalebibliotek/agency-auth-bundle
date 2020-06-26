@@ -50,7 +50,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testTokenAuthenticatorFunctions(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $request = new Request();
         $this->assertFalse($this->tokenAuthenticator->supports($request), 'Token authenticator should not support requests without authorization');
@@ -64,7 +64,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testCachedTokensAreReturnedFromCache(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->cache->expects($this->once())->method('getItem')->with('12345678');
@@ -85,7 +85,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testTokenCallToOpenPlatform(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -104,7 +104,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testAccessDeniedIfRequestNot200(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -121,7 +121,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testAccessDeniedIfRequestException(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -139,7 +139,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testNonActiveUserDenied(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -158,7 +158,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testNonAnonymousTokenTypeDenied(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -177,7 +177,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testExpiredTokenIsDenied(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -196,7 +196,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testErrorTokenIsDenied(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -221,7 +221,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testInvalidJsonTokenIsDenied(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -266,7 +266,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testActiveUSerAllowed(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator([]);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -287,7 +287,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testCachedTokensClientIsAllowed(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator(['allowed-client-id']);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('allowed-client-id');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->cache->expects($this->once())->method('getItem')->with('12345678');
@@ -309,7 +309,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testCachedTokensClientIsNotAllowed(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator(['allowed-client-id']);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('allowed-client-id');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->cache->expects($this->once())->method('getItem')->with('12345678');
@@ -332,7 +332,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testAgencyShouldBeAllowed(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator(['allowed-client-id']);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('allowed-client-id');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -351,7 +351,7 @@ class TokenAuthenticatorTest extends TestCase
      */
     public function testAgencyShouldNotBeAllowed(): void
     {
-        $this->tokenAuthenticator = $this->getTokenAuthenticator(['allowed-client-id']);
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('allowed-client-id');
 
         $this->cache->method('getItem')->willReturn($this->item);
         $this->item->method('isHit')->willReturn(false);
@@ -366,13 +366,13 @@ class TokenAuthenticatorTest extends TestCase
     /**
      * Helper function to setup TokenAuthenticator with/without allowed clients.
      *
-     * @param array $allowedClients
+     * @param string $allowedClients
      *   An allow list of client id's. Supply an empty array to allow all.
      *
      * @return TokenAuthenticator
      *   A configured TokenAuthenticator
      */
-    private function getTokenAuthenticator(array $allowedClients)
+    private function getTokenAuthenticator(string $allowedClients)
     {
         return new TokenAuthenticator('id', 'secret', 'https://auth.test', $allowedClients, $this->httpClient, $this->cache, $this->logger);
     }

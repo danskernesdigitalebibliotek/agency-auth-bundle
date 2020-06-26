@@ -44,7 +44,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      *   Open Platform secret
      * @param string $openplatformIntrospectionUrl
      *   Open Platform introspection URL
-     * @param array $openplatformAllowedClients
+     * @param string $openplatformAllowedClients
      *   An allow list of client id's. Supply an empty array to allow all.
      * @param HttpClientInterface $httpClient
      *   Http client for calls to Open Platform
@@ -53,12 +53,12 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      * @param LoggerInterface|null $logger
      *   Logger for error logging
      */
-    public function __construct(string $openplatformId, string $openplatformSecret, string $openplatformIntrospectionUrl, array $openplatformAllowedClients, HttpClientInterface $httpClient, AdapterInterface $tokenCache = null, LoggerInterface $logger = null)
+    public function __construct(string $openplatformId, string $openplatformSecret, string $openplatformIntrospectionUrl, string $openplatformAllowedClients, HttpClientInterface $httpClient, AdapterInterface $tokenCache = null, LoggerInterface $logger = null)
     {
         $this->clientId = $openplatformId;
         $this->clientSecret = $openplatformSecret;
         $this->endPoint = $openplatformIntrospectionUrl;
-        $this->allowedClients = $openplatformAllowedClients;
+        $this->allowedClients = empty($openplatformAllowedClients) ? [] : explode(',', $openplatformAllowedClients);
 
         $this->client = $httpClient;
         $this->cache = $tokenCache;
