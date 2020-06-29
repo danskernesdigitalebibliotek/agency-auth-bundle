@@ -86,7 +86,15 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        $token = $this->getToken($credentials);
+        try {
+            $token = $this->getToken($credentials);
+            if (null === $token) {
+                return null;
+            }
+        } catch (UnsupportedCredentialsTypeException $e) {
+            return null;
+        }
+
         $user = $this->getCachedUser($token);
 
         if (null === $user) {
