@@ -444,7 +444,6 @@ class TokenAuthenticatorTest extends TestCase
         $this->assertEquals(401, $response->getStatusCode(), 'onAuthenticationFailure should return 401');
     }
 
-
     /**
      * Helper function to setup TokenAuthenticator with/without allowed clients.
      *
