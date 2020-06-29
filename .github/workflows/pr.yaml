@@ -50,7 +50,7 @@ jobs:
               with:
                   php-version: ${{ matrix.php}}
                   extension: apcu, ctype, iconv, imagick, json, redis, soap, xmlreader, zip
-                  coverage: none
+                  coverage: xdebug
 
             - name: Get composer cache directory
               id: composer-cache
@@ -66,7 +66,7 @@ jobs:
 
             - name: Unit tests
               run: ./vendor/bin/simple-phpunit --coverage-clover=coverage/unit.xml
-              
+
             - name: Report coverage to Codecov
               env:
                   CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
