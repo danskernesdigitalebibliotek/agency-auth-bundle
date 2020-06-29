@@ -1,5 +1,5 @@
 on: pull_request
-name: Review
+name: Test & Code Style Review
 jobs:
     test-composer-install:
         runs-on: ubuntu-latest
@@ -50,7 +50,7 @@ jobs:
               with:
                   php-version: ${{ matrix.php}}
                   extension: apcu, ctype, iconv, imagick, json, redis, soap, xmlreader, zip
-                  coverage: none
+                  coverage: xdebug
 
             - name: Get composer cache directory
               id: composer-cache
@@ -66,6 +66,12 @@ jobs:
 
             - name: Unit tests
               run: ./vendor/bin/simple-phpunit --coverage-clover=coverage/unit.xml
+
+            - name: Report coverage to Codecov
+              env:
+                  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+              run: |
+                  bash <(curl -s https://codecov.io/bash) -F Unit -f coverage/unit.xml
 
     runner-phpcs:
         runs-on: ubuntu-latest

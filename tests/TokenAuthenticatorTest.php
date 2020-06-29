@@ -12,8 +12,12 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -325,6 +329,32 @@ class TokenAuthenticatorTest extends TestCase
     }
 
     /**
+     * Test that null tokens returns null.
+     */
+    public function testNullTokensIsNotAllowed(): void
+    {
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
+
+        $this->cache->expects($this->never())->method('getItem');
+
+        $user = $this->tokenAuthenticator->getUser(null, $this->userProvider);
+        $this->assertNull($user, 'Null should be returned when token is null');
+    }
+
+    /**
+     * Test that invalid tokens returns null.
+     */
+    public function testInvalidTokensIsNotAllowed(): void
+    {
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
+
+        $this->cache->expects($this->never())->method('getItem');
+
+        $user = $this->tokenAuthenticator->getUser(12345678, $this->userProvider);
+        $this->assertNull($user, 'Null should be returned when token is invalid');
+    }
+
+    /**
      * Test that a user is returned when client is on client allow list.
      *
      * @throws Exception
@@ -361,6 +391,57 @@ class TokenAuthenticatorTest extends TestCase
 
         $user = $this->tokenAuthenticator->getUser('Bearer 12345678', $this->userProvider);
         $this->assertNull($user, 'TokenAuthenticator should return null when client is not on allow list');
+    }
+
+    /**
+     * Test that checkCredentials always return true.
+     */
+    public function testCheckCredentials(): void
+    {
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
+        $user = $this->createMock(UserInterface::class);
+        // In case of a token, no credential check is needed.
+        // Return `true` to cause authentication success
+        $credentials = $this->tokenAuthenticator->checkCredentials([], $user);
+        $this->assertTrue($credentials, 'checkCredentials should always return true');
+    }
+
+    /**
+     * Test that onAuthenticationSuccess always return null.
+     */
+    public function testOnAuthenticationSuccess(): void
+    {
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
+        $request = $this->createMock(Request::class);
+        $token = $this->createMock(TokenInterface::class);
+        $result = $this->tokenAuthenticator->onAuthenticationSuccess($request, $token, 'key');
+        $this->assertNull($result, 'onAuthenticationSuccess should always return null');
+    }
+
+    /**
+     * Test that onAuthenticationFailure always return JsonResponse status 401.
+     */
+    public function testOnAuthenticationFailure(): void
+    {
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
+        $request = $this->createMock(Request::class);
+        $e = $this->createMock(AuthenticationException::class);
+        $response = $this->tokenAuthenticator->onAuthenticationFailure($request, $e);
+        $this->assertInstanceOf(JsonResponse::class, $response, 'checkCredentials should always return a JsonResponse');
+        $this->assertEquals(401, $response->getStatusCode(), 'onAuthenticationFailure should return 401');
+    }
+
+    /**
+     * Test that start() always return JsonResponse status 401.
+     */
+    public function testStart(): void
+    {
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
+        $request = $this->createMock(Request::class);
+        $e = $this->createMock(AuthenticationException::class);
+        $response = $this->tokenAuthenticator->start($request, $e);
+        $this->assertInstanceOf(JsonResponse::class, $response, 'checkCredentials should always return a JsonResponse');
+        $this->assertEquals(401, $response->getStatusCode(), 'onAuthenticationFailure should return 401');
     }
 
     /**
