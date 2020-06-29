@@ -1,4 +1,9 @@
-# Agency Auth Bundle 
+# Agency Auth Bundle
+
+![](https://github.com/danskernesdigitalebibliotek/agency-auth-bundle/workflows/Test%20%26%20Code%20Style%20Review/badge.svg)
+[![codecov](https://codecov.io/gh/danskernesdigitalebibliotek/agency-auth-bundle/branch/develop/graph/badge.svg)](https://codecov.io/gh/danskernesdigitalebibliotek/agency-auth-bundle)
+
+
 
 This bundle enables _agency_ ("library") authentication against the [Open Platform](https://openplatform.dbc.dk/v3/) (Shared API for
 danish public libraries). In order to use this bundle you must have a `CLIENT_ID / CLIENT_SECRET` pair from DBC.
