@@ -482,6 +482,7 @@ class TokenAuthenticatorTest extends TestCase
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn($httpStatus);
         $expires = new \DateTime($expiresStr, new \DateTimeZone('UTC'));
+        $active = $active ? 'true' : 'false';
         $json = '{
             "active": '.$active.',
             "clientId": "'.$clientId.'",
