@@ -287,7 +287,7 @@ class TokenAuthenticatorTest extends TestCase
     }
 
     /**
-     * Test that access allowed for tokens with lifetime shorter than TOKEN_CACHE_MAX_LIFETIME
+     * Test that access allowed for tokens with lifetime shorter than TOKEN_CACHE_MAX_LIFETIME.
      *
      * @throws Exception
      */
