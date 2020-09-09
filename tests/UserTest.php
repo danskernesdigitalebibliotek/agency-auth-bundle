@@ -6,7 +6,6 @@
 
 namespace DanskernesDigitaleBibliotek\AgencyAuthBundle\Tests;
 
-use DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\TokenAuthenticator;
 use DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\User;
 use PHPUnit\Framework\TestCase;
 
@@ -37,7 +36,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Test get salt
+     * Test get salt.
      */
     public function testSalt(): void
     {
@@ -47,7 +46,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Test erase credentials
+     * Test erase credentials.
      */
     public function testEraseCredentials(): void
     {
