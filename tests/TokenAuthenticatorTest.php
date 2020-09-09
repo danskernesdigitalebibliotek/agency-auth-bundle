@@ -268,7 +268,7 @@ class TokenAuthenticatorTest extends TestCase
      *
      * @throws Exception
      */
-    public function testActiveUSerAllowed(): void
+    public function testActiveUserAllowed(): void
     {
         $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
