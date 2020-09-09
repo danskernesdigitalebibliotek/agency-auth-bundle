@@ -1,8 +1,12 @@
 # Agency Auth Bundle
 
-![](https://github.com/danskernesdigitalebibliotek/agency-auth-bundle/workflows/Test%20%26%20Code%20Style%20Review/badge.svg)
-[![codecov](https://codecov.io/gh/danskernesdigitalebibliotek/agency-auth-bundle/branch/develop/graph/badge.svg)](https://codecov.io/gh/danskernesdigitalebibliotek/agency-auth-bundle)
-
+[![Github](https://img.shields.io/badge/source-danskernesdigitalebibliotek/agency--auth--bundle-blue?style=flat-square)](https://github.com/danskernesdigitalebibliotek/agency-auth-bundle)
+[![Release](https://img.shields.io/packagist/v/danskernesdigitalebibliotek/agency-auth-bundle.svg?style=flat-square&label=release)](https://packagist.org/packages/danskernesdigitalebibliotek/agency-auth-bundle)
+[![PHP Version](https://img.shields.io/packagist/php-v/danskernesdigitalebibliotek/agency-auth-bundle.svg?style=flat-square&colorB=%238892BF)](https://www.php.net/downloads)
+[![Build Status](https://img.shields.io/github/workflow/status/danskernesdigitalebibliotek/agency-auth-bundle/Test%20%26%20Code%20Style%20Review?label=CI&logo=github&style=flat-square)](https://github.com/danskernesdigitalebibliotek/agency-auth-bundle/actions?query=workflow%3A%22Test+%26+Code+Style+Review%22)
+[![Codecov Code Coverage](https://img.shields.io/codecov/c/gh/danskernesdigitalebibliotek/agency-auth-bundle?label=codecov&logo=codecov&style=flat-square)](https://codecov.io/gh/danskernesdigitalebibliotek/agency-auth-bundle)
+[![Read License](https://img.shields.io/packagist/l/danskernesdigitalebibliotek/agency-auth-bundle.svg?style=flat-square&colorB=darkcyan)](https://github.com/danskernesdigitalebibliotek/agency-auth-bundle/blob/master/LICENSE.txt)
+[![Package downloads on Packagist](https://img.shields.io/packagist/dt/danskernesdigitalebibliotek/agency-auth-bundle.svg?style=flat-square&colorB=darkmagenta)](https://packagist.org/packages/danskernesdigitalebibliotek/agency-auth-bundle/stats)
 
 
 This bundle enables _agency_ ("library") authentication against the [Open Platform](https://openplatform.dbc.dk/v3/) (Shared API for
