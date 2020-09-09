@@ -287,6 +287,29 @@ class TokenAuthenticatorTest extends TestCase
     }
 
     /**
+     * Test that access allowed for tokens with lifetime shorter than TOKEN_CACHE_MAX_LIFETIME
+     *
+     * @throws Exception
+     */
+    public function testShortTtlTokenAllowed(): void
+    {
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
+
+        $this->cache->method('getItem')->willReturn($this->item);
+        $this->item->method('isHit')->willReturn(false);
+
+        $response = $this->getMockUserResponse(200, true, 'now + 2 hours', 'client-id-hash', 'anonymous');
+        $this->httpClient->method('request')->willReturn($response);
+
+        $user = $this->tokenAuthenticator->getUser('Bearer 12345678', $this->userProvider);
+        $this->assertInstanceOf(User::class, $user, 'TokenAuthenticator should return a "User" object for valid tokens');
+        $this->assertEquals('123456', $user->getAgency());
+        $this->assertEquals('client-id-hash', $user->getClientId());
+        $this->assertEquals('123456', $user->getUsername());
+        $this->assertEquals('12345678', $user->getPassword());
+    }
+
+    /**
      * Test that cached tokens with allowed client id returns user.
      */
     public function testCachedTokensClientIsAllowed(): void
