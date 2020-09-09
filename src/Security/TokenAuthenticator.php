@@ -191,10 +191,6 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
 
         // Parse token information from the bearer authorization header.
         if (is_string($credentials) && 1 === preg_match('/Bearer\s(\w+)/', $credentials, $matches)) {
-            if (2 !== count($matches)) {
-                return null;
-            }
-
             return $matches[1];
         }
 

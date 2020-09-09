@@ -268,7 +268,7 @@ class TokenAuthenticatorTest extends TestCase
      *
      * @throws Exception
      */
-    public function testActiveUSerAllowed(): void
+    public function testActiveUserAllowed(): void
     {
         $this->tokenAuthenticator = $this->getTokenAuthenticator('');
 
@@ -276,6 +276,29 @@ class TokenAuthenticatorTest extends TestCase
         $this->item->method('isHit')->willReturn(false);
 
         $response = $this->getMockUserResponse(200, true, 'now + 2 days', 'client-id-hash', 'anonymous');
+        $this->httpClient->method('request')->willReturn($response);
+
+        $user = $this->tokenAuthenticator->getUser('Bearer 12345678', $this->userProvider);
+        $this->assertInstanceOf(User::class, $user, 'TokenAuthenticator should return a "User" object for valid tokens');
+        $this->assertEquals('123456', $user->getAgency());
+        $this->assertEquals('client-id-hash', $user->getClientId());
+        $this->assertEquals('123456', $user->getUsername());
+        $this->assertEquals('12345678', $user->getPassword());
+    }
+
+    /**
+     * Test that access allowed for tokens with lifetime shorter than TOKEN_CACHE_MAX_LIFETIME.
+     *
+     * @throws Exception
+     */
+    public function testShortTtlTokenAllowed(): void
+    {
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('');
+
+        $this->cache->method('getItem')->willReturn($this->item);
+        $this->item->method('isHit')->willReturn(false);
+
+        $response = $this->getMockUserResponse(200, true, 'now + 2 hours', 'client-id-hash', 'anonymous');
         $this->httpClient->method('request')->willReturn($response);
 
         $user = $this->tokenAuthenticator->getUser('Bearer 12345678', $this->userProvider);
@@ -482,6 +505,7 @@ class TokenAuthenticatorTest extends TestCase
         $response = $this->createMock(ResponseInterface::class);
         $response->method('getStatusCode')->willReturn($httpStatus);
         $expires = new \DateTime($expiresStr, new \DateTimeZone('UTC'));
+        $active = $active ? 'true' : 'false';
         $json = '{
             "active": '.$active.',
             "clientId": "'.$clientId.'",
