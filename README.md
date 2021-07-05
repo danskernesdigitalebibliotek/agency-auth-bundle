@@ -8,15 +8,13 @@
 [![Read License](https://img.shields.io/packagist/l/danskernesdigitalebibliotek/agency-auth-bundle.svg?style=flat-square&colorB=darkcyan)](https://github.com/danskernesdigitalebibliotek/agency-auth-bundle/blob/master/LICENSE.txt)
 [![Package downloads on Packagist](https://img.shields.io/packagist/dt/danskernesdigitalebibliotek/agency-auth-bundle.svg?style=flat-square&colorB=darkmagenta)](https://packagist.org/packages/danskernesdigitalebibliotek/agency-auth-bundle/stats)
 
+This bundle enables _agency_ ("library") authentication against the [Open Platform](https://openplatform.dbc.dk/v3/) (Shared API for danish public libraries). In order to use this bundle you must have a `CLIENT_ID / CLIENT_SECRET` pair from DBC.
 
-This bundle enables _agency_ ("library") authentication against the [Open Platform](https://openplatform.dbc.dk/v3/) (Shared API for
-danish public libraries). In order to use this bundle you must have a `CLIENT_ID / CLIENT_SECRET` pair from DBC.
+The bundle validates _agency_ access tokens against the Open Platform introspection endpoint. If a supplied token is valid a `User` object with `ROLE_OPENPLATFORM_AGENCY` will be available from Symfony's [security component](https://symfony.com/doc/4.4/security.html#b-fetching-the-user-from-a-service).  
 
-The bundle validates _agency_ access tokens against the Open Platform introspection endpoint. If a supplied token is 
-valid a `User` object with `ROLE_OPENPLATFORM_AGENCY` will be available from Symfony's [security component](https://symfony.com/doc/4.4/security.html#b-fetching-the-user-from-a-service).  
+## Note
 
-### Note:
-If you need _user_ ("personal") authentication you should use [danskernesdigitalebibliotek/oauth2-adgangsplatformen](https://github.com/danskernesdigitalebibliotek/oauth2-adgangsplatformen) 
+If you need _user_ ("personal") authentication you should use [danskernesdigitalebibliotek/oauth2-adgangsplatformen](https://github.com/danskernesdigitalebibliotek/oauth2-adgangsplatformen)
 
 ## Installation
 
@@ -26,7 +24,7 @@ Use Composer to install the bundle: `composer require danskernesdigitalebibliote
 
 Add a `config/packages/ddb_agency_auth.yaml` file:
 
-```
+```dotenv
 ddb_agency_auth:
     # Your client id supplied by DBC
     openplatform_id: '%env(OPENPLATFORM_ID)%'
@@ -49,7 +47,7 @@ ddb_agency_auth:
 
 In your `.env` add:
 
-```
+```dotenv
 ###> Openplatform ###
 OPENPLATFORM_ID=myId
 OPENPLATFORM_SECRET=mySecret
@@ -58,18 +56,17 @@ OPENPLATFORM_ALLOWED_CLIENTS=''
 ###< Openplatform ###
 ```
 
-Then set the actuel values in your `.env.local`. (See [configuration based on environment variables](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables)) 
-
+Then set the actuel values in your `.env.local`. (See [configuration based on environment variables](https://symfony.com/doc/current/configuration.html#configuration-based-on-environment-variables))
 
 ## Security Configuration
 
-Configure firewalls, access control and roles according to your needs in your `config/packages/security.yml`. 
-The bundle provides a `TokenAuthenticator` you can use as a [Symfony Guard](https://symfony.com/doc/4.4/security/guard_authentication.html).
+Configure firewalls, access control and roles according to your needs in your `config/packages/security.yml`. The bundle provides a `TokenAuthenticator` you can use as a [Symfony Guard](https://symfony.com/doc/4.4/security/guard_authentication.html).
 If authenticated it will return a `User` with the `ROLE_OPENPLATFORM_AGENCY`. You can use Symfonys [hierarchical roles](https://symfony.com/doc/4.4/security.html#hierarchical-roles)
 to map this role to your applications roles.
 
 A working security configuration could be:
-```
+
+```yaml
 security:
     providers:
         in_memory: { memory: null }
@@ -161,8 +158,8 @@ To attempt to automatically fix coding style
 * Markdown files (markdownlint standard rules)
 
     ```shell
-    docker run -v ${PWD}:/app itkdev/yarn:latest install
-    docker run -v ${PWD}:/app itkdev/yarn:latest check-coding-standards
+    docker run -v ${PWD}:/app itkdev/yarn:14 install
+    docker run -v ${PWD}:/app itkdev/yarn:14 apply-coding-standards
     ```
 
 ## CI
@@ -172,7 +169,7 @@ Github Actions are used to run the test suite and code style checks on all PR's.
 If you wish to test against the jobs locally you can install [act](https://github.com/nektos/act).
 Then do:
 
-```shell
+```sh
 act -P ubuntu-latest=shivammathur/node:latest pull_request
 ```
 
