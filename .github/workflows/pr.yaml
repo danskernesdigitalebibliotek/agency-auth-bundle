@@ -1,14 +1,15 @@
 on: pull_request
 name: Test & Code Style Review
 jobs:
+
   test-composer-install:
+    name: Validate composer (${{ matrix.php}}) / (${{ matrix.dependency-version}})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         php: [ '7.4', '8.0' ]
         dependency-version: [ prefer-lowest, prefer-stable ]
-    name: Validate composer (${{ matrix.php}}) / (${{ matrix.dependency-version}})
     steps:
       - uses: actions/checkout@master
 
@@ -16,34 +17,34 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php}}
-          extension: apcu, ctype, iconv, imagick, json, redis, soap, xmlreader, zip
           coverage: none
 
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - uses: actions/cache@v1
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ matrix.php }}-composer-
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}-${{ matrix.dependency-version }}-
+          restore-keys: ${{ runner.os }}-composer-${{ matrix.dependency-version }}-
 
       - name: Validate composer files
-        run: composer validate composer.json
+        run: composer validate composer.json --strict
 
-      - name: Composer install with exported .env variables
+      - name: Install dependencies
         run: |
-          set -a && source .env && set +a
-          APP_ENV=prod composer install --no-dev -o
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
-  unit_tests:
+  unit-tests:
+    name: Unit tests (${{ matrix.php }}) / (${{ matrix.dependency-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        php: [ '7.4', '8.0' ]
+        php: [ '7.3', '7.4', '8.0' ]
         dependency-version: [ prefer-lowest, prefer-stable ]
-    name: Unit tests (${{ matrix.php }}) / (${{ matrix.dependency-version }})
     steps:
       - uses: actions/checkout@master
 
@@ -51,36 +52,41 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php}}
-          extension: apcu, ctype, iconv, imagick, json, redis, soap, xmlreader, zip
           coverage: xdebug
 
       - name: Get composer cache directory
         id: composer-cache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - uses: actions/cache@v1
+
+      - name: Cache dependencies
+        uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ matrix.php }}-composer-
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}-${{ matrix.dependency-version }}-
+          restore-keys: ${{ runner.os }}-composer-${{ matrix.dependency-version }}-
 
-      - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+      - name: Install dependencies
+        run: |
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
 
       - name: Unit tests
         run: ./vendor/bin/simple-phpunit --coverage-clover=coverage/unit.xml
 
-      - name: Report coverage to Codecov
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: |
-          bash <(curl -s https://codecov.io/bash) -F Unit -f coverage/unit.xml
+      - name: Upload coverage to Codecov test
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          flags: unittests, ${{ matrix.php }}, ${{ matrix.dependency-version }}
+          fail_ci_if_error: true
+          verbose: true
 
   runner-phpcs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        php: [ '7.4', '8.0' ]
+        php: [ '7.4' ]
     name: Coding style (${{ matrix.php }})
     steps:
       - uses: actions/checkout@master
@@ -117,7 +123,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: [ '7.4', '8.0' ]
+        php: [ '7.4' ]
     name: Coding style fixer (${{ matrix.php }})
     steps:
       - uses: actions/checkout@master
@@ -144,21 +150,12 @@ jobs:
       - name: phpcsfixerr
         run: composer actions/phpcsfixer
 
-  phan:
-    name: PHAN
+  psalm:
+    name: Psalm
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@master
-        with:
-          php-version: 7.4
-          extension-csv: ctype, iconv, json
-          coverage: none
-
-      - name: Install Dependencies
-        run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
-
-      - name: PHAN
-        run: composer actions/phan
+      - name: Psalm
+        uses: docker://vimeo/psalm-github-actions
