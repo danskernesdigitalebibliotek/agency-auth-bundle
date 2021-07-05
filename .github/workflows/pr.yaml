@@ -78,7 +78,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage/unit.xml
           flags: unittests, ${{ matrix.php }}, ${{ matrix.dependency-version }}
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           verbose: true
 
   runner-phpcs:
