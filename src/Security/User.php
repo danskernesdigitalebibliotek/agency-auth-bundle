@@ -110,7 +110,7 @@ class User implements UserInterface
     /**
      * {@inheritdoc}
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPassword(): ?string
     {
@@ -136,7 +136,7 @@ class User implements UserInterface
     /**
      * {@inheritdoc}
      *
-     * @return null|string
+     * @return string|null
      */
     public function getUsername(): ?string
     {
