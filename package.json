@@ -1,6 +1,7 @@
 {
   "license": "UNLICENSED",
   "private": true,
+  "description": "Tooling setup for linting",
   "devDependencies": {
     "markdownlint-cli": "^0.27.1"
   },
