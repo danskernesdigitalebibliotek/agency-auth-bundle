@@ -24,13 +24,13 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  */
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
-    private $client;
-    private $cache;
-    private $clientId;
-    private $clientSecret;
-    private $allowedClients;
-    private $endPoint;
-    private $logger;
+    private HttpClientInterface $client;
+    private ?AdapterInterface $cache;
+    private string $clientId;
+    private string $clientSecret;
+    private array $allowedClients;
+    private string $endPoint;
+    private ?LoggerInterface $logger;
 
     private const TOKEN_CACHE_MAX_LIFETIME = 'P1D';
 

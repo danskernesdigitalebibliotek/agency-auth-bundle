@@ -13,11 +13,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-    private $password;
-    private $expires;
-    private $agency;
-    private $authType;
-    private $clientId;
+    private ?string $password;
+    private ?\DateTime $expires;
+    private ?string $agency;
+    private string $authType;
+    private string $clientId;
 
     /**
      * Get this users "password" expire date.
@@ -109,8 +109,10 @@ class User implements UserInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return null|string
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -133,8 +135,10 @@ class User implements UserInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return null|string
      */
-    public function getUsername(): string
+    public function getUsername(): ?string
     {
         return $this->agency;
     }
