@@ -76,6 +76,7 @@ class TokenAuthenticatorTest extends TestCase
         $this->item->method('isHit')->willReturn(true);
         $user = new User();
         $user->setAgency('123456');
+        $user->setExpires(new \DateTime('+1day'));
         $this->item->method('get')->willReturn($user);
         $this->item->expects($this->once())->method('get');
 
@@ -344,6 +345,7 @@ class TokenAuthenticatorTest extends TestCase
         $this->item->method('isHit')->willReturn(true);
         $user = new User();
         $user->setClientId('not-allowed-client-id');
+        $user->setExpires(new \DateTime('+1day'));
         $this->item->method('get')->willReturn($user);
         $this->item->expects($this->once())->method('get');
 
