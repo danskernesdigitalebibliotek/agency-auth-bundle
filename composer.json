@@ -20,9 +20,10 @@
     "sort-packages": true
   },
   "require": {
-    "php": "^7.3",
+    "php": "^7.4 | ^8.0",
     "ext-curl": "*",
     "ext-json": "*",
+    "symfony/cache": "^4.4",
     "symfony/config": "^4.4",
     "symfony/dependency-injection": "^4.4",
     "symfony/http-client": "^4.4",
@@ -34,9 +35,8 @@
     "drenso/phan-extensions": "^3.1",
     "escapestudios/symfony2-coding-standard": "^3.10",
     "friendsofphp/php-cs-fixer": "^2.13",
-    "phan/phan": "^3.0",
-    "symfony/cache": "^4.4",
-    "symfony/phpunit-bridge": "^4.4"
+    "symfony/phpunit-bridge": "^4.4",
+    "vimeo/psalm": "^4.8"
   },
   "scripts": {
     "apply-coding-standards": [
@@ -45,8 +45,7 @@
     ],
     "check-coding-standards": [
       "@check-coding-standards/php-cs-fixer",
-      "@check-coding-standards/phpcs",
-      "@check-coding-standards/twigcs"
+      "@check-coding-standards/phpcs"
     ],
     "check-coding-standards/php-cs-fixer": [
       "php-cs-fixer --config=.php_cs.dist fix --dry-run --format=checkstyle"
