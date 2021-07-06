@@ -119,7 +119,7 @@ in 3rd party libraries like the `JWT::decode` method from `firebase/jwt`.
 
 ### Psalm static analysis
 
-Where using [Psalm](https://psalm.dev/) for static analysis. To run
+We are using [Psalm](https://psalm.dev/) for static analysis. To run
 psalm do
 
 ```shell
