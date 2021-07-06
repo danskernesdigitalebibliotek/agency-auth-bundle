@@ -76,6 +76,7 @@ class TokenAuthenticatorTest extends TestCase
         $this->item->method('isHit')->willReturn(true);
         $user = new User();
         $user->setAgency('123456');
+        $user->setExpires(new \DateTime('+1day'));
         $this->item->method('get')->willReturn($user);
         $this->item->expects($this->once())->method('get');
 
@@ -332,6 +333,27 @@ class TokenAuthenticatorTest extends TestCase
     }
 
     /**
+     * Test that cached tokens with expired tokens returns null.
+     */
+    public function testCachedExpiredTokensNotAllowed(): void
+    {
+        $this->tokenAuthenticator = $this->getTokenAuthenticator('allowed-client-id');
+
+        $this->cache->method('getItem')->willReturn($this->item);
+        $this->cache->expects($this->once())->method('getItem')->with('12345678');
+
+        $this->item->method('isHit')->willReturn(true);
+        $user = new User();
+        $user->setClientId('not-allowed-client-id');
+        $user->setExpires(new \DateTime('-1min'));
+        $this->item->method('get')->willReturn($user);
+        $this->item->expects($this->once())->method('get');
+
+        $user = $this->tokenAuthenticator->getUser('Bearer 12345678', $this->userProvider);
+        $this->assertNull($user, 'Null should be returned when the cached user is expired');
+    }
+
+    /**
      * Test that cached tokens with not-allowed client id returns null.
      */
     public function testCachedTokensClientIsNotAllowed(): void
@@ -344,6 +366,7 @@ class TokenAuthenticatorTest extends TestCase
         $this->item->method('isHit')->willReturn(true);
         $user = new User();
         $user->setClientId('not-allowed-client-id');
+        $user->setExpires(new \DateTime('+1day'));
         $this->item->method('get')->willReturn($user);
         $this->item->expects($this->once())->method('get');
 
