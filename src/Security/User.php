@@ -145,6 +145,16 @@ class User implements UserInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return string
+     */
+    public function getUserIdentifier(): string
+    {
+        return $this->agency;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function eraseCredentials(): ?string
     {
