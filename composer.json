@@ -23,19 +23,19 @@
     "php": "^7.4 | ^8.0",
     "ext-curl": "*",
     "ext-json": "*",
-    "symfony/cache": "^4.4",
-    "symfony/config": "^4.4",
-    "symfony/dependency-injection": "^4.4",
-    "symfony/http-client": "^4.4",
-    "symfony/http-foundation": "^4.4",
-    "symfony/http-kernel": "^4.4",
-    "symfony/security": "^4.4"
+    "symfony/cache": "^4.4 | ^5.2",
+    "symfony/config": "^4.4 | ^5.2",
+    "symfony/dependency-injection": "^4.4 | ^5.2",
+    "symfony/http-client": "^4.4 | ^5.2",
+    "symfony/http-foundation": "^4.4 | ^5.2",
+    "symfony/http-kernel": "^4.4 | ^5.2",
+    "symfony/security": "^4.4 | ^5.2"
   },
   "require-dev": {
     "drenso/phan-extensions": "^3.1",
     "escapestudios/symfony2-coding-standard": "^3.10",
     "friendsofphp/php-cs-fixer": "^2.13",
-    "symfony/phpunit-bridge": "^4.4",
+    "symfony/phpunit-bridge": "^4.4 | ^5.2",
     "vimeo/psalm": "^4.8"
   },
   "scripts": {
