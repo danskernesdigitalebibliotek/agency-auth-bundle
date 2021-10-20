@@ -21,8 +21,6 @@ class User implements UserInterface
 
     /**
      * Get this users "password" expire date.
-     *
-     * @return \DateTime|null
      */
     public function getExpires(): ?\DateTime
     {
@@ -31,8 +29,6 @@ class User implements UserInterface
 
     /**
      * Set this users "password" expire date.
-     *
-     * @param \DateTime $expires
      */
     public function setExpires(\DateTime $expires): void
     {
@@ -41,8 +37,6 @@ class User implements UserInterface
 
     /**
      * Get the users agency.
-     *
-     * @return string
      */
     public function getAgency(): string
     {
@@ -51,8 +45,6 @@ class User implements UserInterface
 
     /**
      * Set the users agency.
-     *
-     * @param string $agency
      */
     public function setAgency(string $agency): void
     {
@@ -61,8 +53,6 @@ class User implements UserInterface
 
     /**
      * Get users authentication type.
-     *
-     * @return string
      */
     public function getAuthType(): string
     {
@@ -71,8 +61,6 @@ class User implements UserInterface
 
     /**
      * Set users authentication type.
-     *
-     * @param string $authType
      */
     public function setAuthType(string $authType): void
     {
@@ -81,8 +69,6 @@ class User implements UserInterface
 
     /**
      * Get users client id.
-     *
-     * @return string
      */
     public function getClientId(): string
     {
@@ -91,8 +77,6 @@ class User implements UserInterface
 
     /**
      * Set users client id.
-     *
-     * @param string $clientId
      */
     public function setClientId(string $clientId): void
     {
@@ -109,8 +93,6 @@ class User implements UserInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return string|null
      */
     public function getPassword(): ?string
     {
@@ -135,8 +117,6 @@ class User implements UserInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
     public function getUsername(): string
     {
@@ -145,8 +125,6 @@ class User implements UserInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @return string
      */
     public function getUserIdentifier(): string
     {
