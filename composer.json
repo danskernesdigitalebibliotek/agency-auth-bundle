@@ -39,10 +39,10 @@
   },
   "scripts": {
     "coding-standards-apply": [
-      "php-cs-fixer --config=.php_cs.dist fix"
+      "php-cs-fixer fix"
     ],
     "coding-standards-check": [
-      "php-cs-fixer --config=.php_cs.dist fix --dry-run --format=checkstyle"
+      "php-cs-fixer fix --dry-run --format=checkstyle"
     ],
     "phan": [
       "./vendor/bin/phan --allow-polyfill-parser"
@@ -54,7 +54,7 @@
       "@phpunit"
     ],
     "actions/phpcsfixer": [
-      "php-cs-fixer --config=.php_cs.dist fix --dry-run --diff --diff-format=udiff"
+      "php-cs-fixer fix --dry-run --format=checkstyle"
     ],
     "actions/phan": [
       "./vendor/bin/phan --no-progress-bar --allow-polyfill-parser"
