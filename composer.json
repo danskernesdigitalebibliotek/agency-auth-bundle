@@ -29,35 +29,20 @@
     "symfony/http-client": "^4.4 | ^5.2",
     "symfony/http-foundation": "^4.4 | ^5.2",
     "symfony/http-kernel": "^4.4 | ^5.2",
-    "symfony/security": "^4.4 | ^5.2"
+    "symfony/security-guard": "^4.4 | <5.3"
   },
   "require-dev": {
     "drenso/phan-extensions": "^3.1",
-    "escapestudios/symfony2-coding-standard": "^3.10",
-    "friendsofphp/php-cs-fixer": "^2.13",
+    "friendsofphp/php-cs-fixer": "^3.2",
     "symfony/phpunit-bridge": "^4.4 | ^5.2",
     "vimeo/psalm": "^4.8"
   },
   "scripts": {
-    "apply-coding-standards": [
-      "@apply-coding-standards/php-cs-fixer",
-      "@apply-coding-standards/phpcs"
+    "coding-standards-apply": [
+      "php-cs-fixer fix"
     ],
-    "check-coding-standards": [
-      "@check-coding-standards/php-cs-fixer",
-      "@check-coding-standards/phpcs"
-    ],
-    "check-coding-standards/php-cs-fixer": [
-      "php-cs-fixer --config=.php_cs.dist fix --dry-run --format=checkstyle"
-    ],
-    "check-coding-standards/phpcs": [
-      "phpcs --standard=phpcs.xml.dist"
-    ],
-    "apply-coding-standards/php-cs-fixer": [
-      "php-cs-fixer --config=.php_cs.dist fix"
-    ],
-    "apply-coding-standards/phpcs": [
-      "phpcbf --standard=phpcs.xml.dist"
+    "coding-standards-check": [
+      "php-cs-fixer fix --dry-run --format=checkstyle"
     ],
     "phan": [
       "./vendor/bin/phan --allow-polyfill-parser"
@@ -68,11 +53,8 @@
     "test-suite": [
       "@phpunit"
     ],
-    "actions/phpcs": [
-      "phpcs --standard=phpcs.xml.dist --report=checkstyle"
-    ],
     "actions/phpcsfixer": [
-      "php-cs-fixer --config=.php_cs.dist fix --dry-run --diff --diff-format=udiff"
+      "php-cs-fixer fix --dry-run --format=checkstyle"
     ],
     "actions/phan": [
       "./vendor/bin/phan --no-progress-bar --allow-polyfill-parser"
