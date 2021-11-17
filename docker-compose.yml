@@ -1,3 +1,4 @@
+# itk-version: 2.0.0
 version: "3"
 
 services:
@@ -12,7 +13,19 @@ services:
       - PHP_IDE_CONFIG=serverName=localhost
       - COMPOSER_VERSION=2
     volumes:
-      - .:/app:delegated
+      - nfsApp:/app:delegated
     tmpfs:
       - /app/var/cache:size=1G
       - /tmp:size=1G
+
+volumes:
+  # Named volume requires that you have NFS shares enabled (performance boost on Macs).
+  # Use `itkdev-docker-compose nfs:enable` to enable NFS shares. If you don't want to use it remove it from here and
+  # change the volume mapping to use normal shares in the containers. See
+  # https://sean-handley.medium.com/how-to-set-up-docker-for-mac-with-native-nfs-145151458adc
+  nfsApp:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=host.docker.internal,rw,nolock,hard,nointr,nfsvers=3
+      device: ":$PWD"
