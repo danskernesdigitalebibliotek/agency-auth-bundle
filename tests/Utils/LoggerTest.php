@@ -17,7 +17,7 @@ class LoggerTest extends TestCase
 
         $logger->logError(self::class, 'test');
     }
-    
+
     public function testLogException(): void
     {
         $loggerInterfaceMock = $this->createMock(LoggerInterface::class);
@@ -25,6 +25,6 @@ class LoggerTest extends TestCase
 
         $logger = new Logger($loggerInterfaceMock);
 
-        $logger->logError(self::class, 'test');        
+        $logger->logError(self::class, 'test');
     }
 }
