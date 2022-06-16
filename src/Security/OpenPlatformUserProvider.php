@@ -69,7 +69,7 @@ class OpenPlatformUserProvider implements UserProviderInterface
             // Unknown format/token type
             if ('anonymous' !== $user->getAuthType()) {
                 $message = 'Token call to Open Platform returned unknown type: '.$user->getAuthType();
-                $this->logger->logError($message);
+                $this->logger->logError(self::class, $message);
 
                 throw new UserNotFoundException($message);
             }

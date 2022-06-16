@@ -116,7 +116,7 @@ class OpenplatformOauthApiClient
 
             if (200 !== $response->getStatusCode()) {
                 $message = 'Http call to Open Platform returned status: '.$response->getStatusCode();
-                $this->logger->logError($message);
+                $this->logger->logError(self::class, $message);
 
                 throw new OpenPlatformException($message);
             }
@@ -128,7 +128,7 @@ class OpenplatformOauthApiClient
             // Error from Open Platform
             if (isset($data->error)) {
                 $message = 'Token call to Open Platform returned error: '.(string) $data->error;
-                $this->logger->logError($message);
+                $this->logger->logError(self::class, $message);
 
                 throw new OpenPlatformException($message);
             }

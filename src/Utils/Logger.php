@@ -21,9 +21,9 @@ class Logger
      * @param string $message
      *   The message to log
      */
-    public function logError(string $message): void
+    public function logError(string $class, string $message): void
     {
-        $this->logger?->error(self::class.' '.$message);
+        $this->logger?->error($class.' '.$message);
     }
 
     /**
