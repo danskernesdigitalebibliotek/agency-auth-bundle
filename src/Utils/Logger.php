@@ -34,7 +34,6 @@ class Logger
      */
     public function logException(\Throwable $e): void
     {
-        $message = get_class($e).' '.$e->getMessage();
-        $this->logError($message);
+        $this->logError(get_class($e), $e->getMessage());
     }
 }
