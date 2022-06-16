@@ -1,17 +1,10 @@
 <?php
-/**
- * @file
- * User class tests
- */
 
-namespace DanskernesDigitaleBibliotek\AgencyAuthBundle\Tests;
+namespace DanskernesDigitaleBibliotek\AgencyAuthBundle\Tests\Security;
 
 use DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\User;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class BundleTest.
- */
 class UserTest extends TestCase
 {
     /**
@@ -36,22 +29,14 @@ class UserTest extends TestCase
     }
 
     /**
-     * Test get salt.
-     */
-    public function testSalt(): void
-    {
-        $user = new User();
-
-        $this->assertNull($user->getSalt());
-    }
-
-    /**
      * Test erase credentials.
      */
     public function testEraseCredentials(): void
     {
         $user = new User();
+        $user->setToken('1234');
+        $user->eraseCredentials();
 
-        $this->assertNull($user->eraseCredentials());
+        $this->assertNull($user->getToken());
     }
 }

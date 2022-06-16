@@ -6,5 +6,9 @@
     <services>
         <service id="ddb.agency_token_auth" class="DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\TokenAuthenticator" public="true" />
         <service id="DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\TokenAuthenticator" alias="ddb.agency_token_auth" public="false" />
+        <service id="DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\OpenPlatformUserProvider" public="false" />
+        <service id="DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\User" public="false" />
+        <service id="DanskernesDigitaleBibliotek\AgencyAuthBundle\Openplatform\OpenplatformOauthApiClient" public="false" />
+        <service id="DanskernesDigitaleBibliotek\AgencyAuthBundle\Utils\Logger" public="false" />
     </services>
 </container>
