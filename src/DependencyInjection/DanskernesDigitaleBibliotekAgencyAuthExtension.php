@@ -29,7 +29,7 @@ class DanskernesDigitaleBibliotekAgencyAuthExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-           $configuration = $this->getConfiguration($configs, $container);
+        $configuration = $this->getConfiguration($configs, $container);
         if (null === $configuration) {
             throw new MissingConfigurationException('The configuration for ddb_agency_auth could ot be loaded');
         }
