@@ -29,26 +29,26 @@ class DanskernesDigitaleBibliotekAgencyAuthExtension extends Extension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.xml');
 
-        $configuration = $this->getConfiguration($configs, $container);
+           $configuration = $this->getConfiguration($configs, $container);
         if (null === $configuration) {
             throw new MissingConfigurationException('The configuration for ddb_agency_auth could ot be loaded');
         }
         $config = $this->processConfiguration($configuration, $configs);
 
-        $definition = $container->getDefinition('ddb.agency_token_auth');
-        $definition->setArgument(0, $config['openplatform_id']);
-        $definition->setArgument(1, $config['openplatform_secret']);
-        $definition->setArgument(2, $config['openplatform_introspection_url']);
-        $definition->setArgument(3, $config['openplatform_allowed_clients']);
+        $openPlatformUserProviderDefinition = $container->getDefinition('DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\OpenPlatformUserProvider');
+        $openPlatformUserProviderDefinition->setArgument(0, $config['openplatform_allowed_clients']);
 
+        $openplatformOauthApiClientDefinition = $container->getDefinition('DanskernesDigitaleBibliotek\AgencyAuthBundle\Openplatform\OpenplatformOauthApiClient');
+        $openplatformOauthApiClientDefinition->setArgument(0, $config['openplatform_id']);
+        $openplatformOauthApiClientDefinition->setArgument(1, $config['openplatform_secret']);
+        $openplatformOauthApiClientDefinition->setArgument(2, $config['openplatform_introspection_url']);
         if (is_string($config['http_client'])) {
-            $definition->setArgument(4, new Reference($config['http_client']));
+            $openplatformOauthApiClientDefinition->setArgument(3, new Reference($config['http_client']));
         }
-        if (is_string($config['auth_token_cache'])) {
-            $definition->setArgument(5, new Reference($config['auth_token_cache']));
-        }
+
+        $loggerDefinition = $container->getDefinition('DanskernesDigitaleBibliotek\AgencyAuthBundle\Utils\Logger');
         if (is_string($config['auth_logger'])) {
-            $definition->setArgument(6, new Reference($config['auth_logger']));
+            $loggerDefinition->setArgument(0, new Reference($config['auth_logger']));
         }
     }
 

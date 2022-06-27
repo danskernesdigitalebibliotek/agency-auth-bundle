@@ -24,6 +24,8 @@ class OpenplatformOauthApiClient
      *   Open Platform introspection URL
      * @param HttpClientInterface $client
      *   Http client for calls to Open Platform
+     * @param Logger $logger
+     *   Bundle logger service
      */
     public function __construct(private readonly string $clientId, private readonly string $clientSecret, private readonly string $endPoint, private readonly HttpClientInterface $client, private readonly Logger $logger)
     {
