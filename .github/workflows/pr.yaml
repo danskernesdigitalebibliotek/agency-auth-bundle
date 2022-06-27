@@ -1,4 +1,8 @@
-on: pull_request
+on:
+  pull_request:
+  schedule:
+    # “At 04:44 on Saturday.”
+    - cron: '44 4 * * 6'
 name: Test & Code Style Review
 jobs:
 
