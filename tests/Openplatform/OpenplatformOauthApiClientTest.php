@@ -65,7 +65,7 @@ class OpenplatformOauthApiClientTest extends TestCase
     {
         $openplatformOauthApiClient = $this->getOpenplatformOauthApiClient('');
 
-        $response = $this->getMockUserResponse(401, true, 'invalid date', 'client-id-hash', 'anonymous');
+        $response = $this->getMockUserResponse(200, true, 'invalid date', 'client-id-hash', 'anonymous');
         $this->httpClient->method('request')->willReturn($response);
 
         $this->expectException(\Exception::class);

@@ -11,6 +11,7 @@ use DanskernesDigitaleBibliotek\AgencyAuthBundle\Utils\Logger;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
+use Symfony\Component\Cache\Adapter\TraceableAdapter;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 class OpenPlatformUserProviderTest extends TestCase
@@ -25,7 +26,7 @@ class OpenPlatformUserProviderTest extends TestCase
 
         $this->logger = $this->createMock(Logger::class);
         $this->client = $this->createMock(OpenplatformOauthApiClient::class);
-        $this->cache = new ArrayAdapter();
+        $this->cache = new TraceableAdapter(new ArrayAdapter());
     }
 
     /**
@@ -89,6 +90,21 @@ class OpenPlatformUserProviderTest extends TestCase
         $this->expectExceptionMessage('User expired. User loaded from cache for agency id: 12345678');
 
         $openPlatformUserProvider->loadUserByIdentifier('12345678');
+    }
+
+    /**
+     * Test that access denied if token is expired.
+     */
+    public function testExpireSoonTokenCacheExpire(): void
+    {
+        $openPlatformUserProvider = $this->getOpenplatformUserProvider();
+
+        $user = $this->getUser(expire: '2 days');
+        $user->setToken('mock');
+        $this->client->method('getUser')->willReturn($user);
+
+        $loadedUser = $openPlatformUserProvider->loadUserByIdentifier('12345678');
+        $this->assertEquals($user, $loadedUser, 'Provider should return user from client');
     }
 
     /**
@@ -169,8 +185,6 @@ class OpenPlatformUserProviderTest extends TestCase
 
     /**
      * Helper function to set up users.
-     *
-     * @throws \Exception
      */
     private function getUser(bool $active = true, string $type = 'anonymous', string $expire = '+ 1 day'): User
     {
