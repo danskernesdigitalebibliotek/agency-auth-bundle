@@ -68,8 +68,8 @@ class OpenplatformOauthApiClientTest extends TestCase
         $response = $this->getMockUserResponse(200, true, 'invalid date', 'client-id-hash', 'anonymous');
         $this->httpClient->method('request')->willReturn($response);
 
-        $this->expectException(\Exception::class);
-        //$this->expectExceptionMessage('Http call to Open Platform returned status: 401');
+        $this->expectException(OpenPlatformException::class);
+        $this->expectExceptionMessageMatches('/^Exception from \\\DateTime.*/');
 
         $user = $openplatformOauthApiClient->getUser('Bearer 12345678');
     }

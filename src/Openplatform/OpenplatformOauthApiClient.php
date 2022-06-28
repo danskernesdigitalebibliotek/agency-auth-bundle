@@ -72,7 +72,7 @@ class OpenplatformOauthApiClient
             $tokenExpireDataTime = new \DateTime((string) $userData->expires);
             $user->setExpires($tokenExpireDataTime);
         } catch (\Exception $e) {
-            throw new OpenPlatformException('Exception from \\DateTime(): '.$e->getMessage(), (int) $e->getCode(), $e);
+            throw new OpenPlatformException('Exception from \DateTime(): '.$e->getMessage(), (int) $e->getCode(), $e);
         }
 
         if (isset($userData->clientId) && is_string($userData->clientId)) {
