@@ -59,6 +59,22 @@ class OpenplatformOauthApiClientTest extends TestCase
     }
 
     /**
+     * Test that exception is thrown if Open Platform does not return valid expire date.
+     */
+    public function testRequestInvalidExpire(): void
+    {
+        $openplatformOauthApiClient = $this->getOpenplatformOauthApiClient('');
+
+        $response = $this->getMockUserResponse(401, true, 'invalid date', 'client-id-hash', 'anonymous');
+        $this->httpClient->method('request')->willReturn($response);
+
+        $this->expectException(\Exception::class);
+        //$this->expectExceptionMessage('Http call to Open Platform returned status: 401');
+
+        $user = $openplatformOauthApiClient->getUser('Bearer 12345678');
+    }
+
+    /**
      * Test that correct exception is thrown if request throws exception.
      */
     public function testRequestException(): void
@@ -217,12 +233,17 @@ class OpenplatformOauthApiClientTest extends TestCase
         ];
 
         $response->method('getInfo')->willReturn($this->returnValueMap($map));
-        $expires = new \DateTime($expiresStr, new \DateTimeZone('UTC'));
+        try {
+            $expires = new \DateTime($expiresStr, new \DateTimeZone('UTC'));
+            $expiresStr = $expires->format('Y-m-d\TH:i:s.u\Z');
+        } catch (\Exception $e) {
+            // Allow the raw inout for testing invalid date strings
+        }
         $active = $active ? 'true' : 'false';
         $json = '{
             "active": '.$active.',
             "clientId": "'.$clientId.'",
-            "expires": "'.$expires->format('Y-m-d\TH:i:s.u\Z').'",
+            "expires": "'.$expiresStr.'",
             "agency": "123456",
             "uniqueId": null,
             "search": {

@@ -75,7 +75,7 @@ class OpenPlatformUserProvider implements UserProviderInterface
             }
 
             return $user;
-        } catch (InvalidArgumentException|OpenPlatformException $e) {
+        } catch (OpenPlatformException $e) {
             throw new UserNotFoundException('No user found for agency id: '.$identifier, $e->getCode(), $e);
         }
     }

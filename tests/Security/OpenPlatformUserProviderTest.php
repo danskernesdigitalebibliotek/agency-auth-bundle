@@ -3,6 +3,7 @@
 namespace DanskernesDigitaleBibliotek\AgencyAuthBundle\Tests\Security;
 
 use DanskernesDigitaleBibliotek\AgencyAuthBundle\Exception\NotImplementedException;
+use DanskernesDigitaleBibliotek\AgencyAuthBundle\Exception\OpenPlatformException;
 use DanskernesDigitaleBibliotek\AgencyAuthBundle\Openplatform\OpenplatformOauthApiClient;
 use DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\OpenPlatformUserProvider;
 use DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\User;
@@ -29,8 +30,6 @@ class OpenPlatformUserProviderTest extends TestCase
 
     /**
      * Test that access granted if user is valid Open Platform token supplied.
-     *
-     * @throws Exception
      */
     public function testActiveUserAllowed(): void
     {
@@ -46,8 +45,6 @@ class OpenPlatformUserProviderTest extends TestCase
 
     /**
      * Test that access denied if user non 'active' in Open Platform.
-     *
-     * @throws Exception
      */
     public function testNonActiveUserDenied(): void
     {
@@ -64,8 +61,6 @@ class OpenPlatformUserProviderTest extends TestCase
 
     /**
      * Test that access denied if user not 'anonymous' e.g. unknown user type in Open Platform.
-     *
-     * @throws Exception
      */
     public function testNonAnonymousTokenTypeDenied(): void
     {
@@ -82,8 +77,6 @@ class OpenPlatformUserProviderTest extends TestCase
 
     /**
      * Test that access denied if token is expired.
-     *
-     * @throws Exception
      */
     public function testExpiredTokenIsDenied(): void
     {
@@ -156,6 +149,22 @@ class OpenPlatformUserProviderTest extends TestCase
 
         $supports = $openPlatformUserProvider->supportsClass(\http\Client\Curl\User::class);
         $this->assertFalse($supports);
+    }
+
+    /**
+     * Test exception throw.
+     */
+    public function testExceptionThrow(): void
+    {
+        $openPlatformUserProvider = $this->getOpenplatformUserProvider('');
+
+        $user = $this->getUser(active: true);
+        $this->client->method('getUser')->willThrowException(new OpenPlatformException());
+
+        $this->expectException(UserNotFoundException::class);
+        $this->expectExceptionMessage('No user found for agency id: 12345678');
+
+        $loadedUser = $openPlatformUserProvider->loadUserByIdentifier('12345678');
     }
 
     /**
