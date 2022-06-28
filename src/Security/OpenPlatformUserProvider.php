@@ -105,8 +105,6 @@ class OpenPlatformUserProvider implements UserProviderInterface
      *   The auth token to use as cache key
      * @param User $user
      *   The user object to cache
-     *
-     * @throws InvalidArgumentException
      */
     private function cacheUser(string $token, User $user): void
     {
@@ -129,7 +127,7 @@ class OpenPlatformUserProvider implements UserProviderInterface
                 // Store access token in local cache.
                 $item->set($user);
                 $this->cache->save($item);
-            } catch (\Exception $e) {
+            } catch (InvalidArgumentException $e) {
                 $this->logger->logException($e);
             }
         }
