@@ -17,26 +17,26 @@ class UserTest extends TestCase
 
         $this->assertSame('anonymous', $user->getAuthType());
     }
-    
+
     public function testUser(): void
     {
         $user = new User();
-        
+
         $this->assertFalse($user->isActive());
-        
+
         $expires = new \DateTime('now');
         $agency = 'agency';
         $authType = 'anonymous';
         $clientId = '1234';
         $token = 'auth1234';
-        
+
         $user->setExpires($expires);
         $user->setAgency($agency);
         $user->setActive(true);
         $user->setAuthType($authType);
         $user->setClientId($clientId);
         $user->setToken($token);
-        
+
         $this->assertSame($expires, $user->getExpires());
         $this->assertSame($agency, $user->getAgency());
         $this->assertSame($agency, $user->getUserIdentifier());

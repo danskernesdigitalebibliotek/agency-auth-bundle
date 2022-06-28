@@ -59,7 +59,7 @@ class OpenPlatformUserProviderTest extends TestCase
 
         $loadedUser = $openPlatformUserProvider->loadUserByIdentifier('12345678');
         $this->assertEquals($user, $loadedUser, 'Provider should return user from client');
-        
+
         // Loading and caching the user from the Open Platform will trigger 3 cache adapter calls
         $this->assertEquals(3, \count($this->cache->getCalls()));
 
