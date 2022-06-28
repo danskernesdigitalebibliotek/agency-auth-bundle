@@ -39,6 +39,7 @@ class UserTest extends TestCase
         
         $this->assertSame($expires, $user->getExpires());
         $this->assertSame($agency, $user->getAgency());
+        $this->assertSame($agency, $user->getUserIdentifier());
         $this->assertTrue($user->isActive());
         $this->assertSame($authType, $user->getAuthType());
         $this->assertSame($clientId, $user->getClientId());

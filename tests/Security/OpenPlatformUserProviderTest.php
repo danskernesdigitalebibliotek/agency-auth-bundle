@@ -45,6 +45,32 @@ class OpenPlatformUserProviderTest extends TestCase
     }
 
     /**
+     * Test that user are loaded from cache on second request.
+     */
+    public function testUserCashing(): void
+    {
+        $openPlatformUserProvider = $this->getOpenplatformUserProvider();
+
+        $calls = $this->cache->getCalls();
+
+        $user = $this->getUser(active: true);
+        $user->setToken('mock');
+        $this->client->method('getUser')->willReturn($user);
+
+        $loadedUser = $openPlatformUserProvider->loadUserByIdentifier('12345678');
+        $this->assertEquals($user, $loadedUser, 'Provider should return user from client');
+        
+        // Loading and caching the user from the Open Platform will trigger 3 cache adapter calls
+        $this->assertEquals(3, \count($this->cache->getCalls()));
+
+        $cachedUser = $openPlatformUserProvider->loadUserByIdentifier('12345678');
+        $this->assertEquals($cachedUser, $loadedUser, 'Provider should return user from client');
+
+        // Loading user again should hit the cache and only trigger 1 call extra
+        $this->assertEquals(4, \count($this->cache->getCalls()));
+    }
+
+    /**
      * Test that access denied if user non 'active' in Open Platform.
      */
     public function testNonActiveUserDenied(): void
