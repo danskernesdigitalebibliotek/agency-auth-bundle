@@ -30,7 +30,12 @@ class OpenPlatformUserProvider implements UserProviderInterface
      * @param Logger $logger
      *   Logger for error logging
      */
-    public function __construct(string $openplatformAllowedClients, private readonly OpenplatformOauthApiClient $openplatformOauthApiClient, private readonly Logger $logger, private readonly ?AdapterInterface $cache = null)
+    public function __construct(
+        string $openplatformAllowedClients,
+        private readonly OpenplatformOauthApiClient $openplatformOauthApiClient,
+        private readonly Logger $logger,
+        private readonly ?AdapterInterface $cache = null
+    )
     {
         $this->allowedClients = empty($openplatformAllowedClients) ? [] : array_map('trim', explode(',', $openplatformAllowedClients));
     }

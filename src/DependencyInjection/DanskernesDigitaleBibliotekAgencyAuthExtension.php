@@ -37,6 +37,9 @@ class DanskernesDigitaleBibliotekAgencyAuthExtension extends Extension
 
         $openPlatformUserProviderDefinition = $container->getDefinition('DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\OpenPlatformUserProvider');
         $openPlatformUserProviderDefinition->setArgument(0, $config['openplatform_allowed_clients']);
+        if (null !== $config['auth_token_cache']) {
+            $openPlatformUserProviderDefinition->setArgument(3, new Reference($config['auth_token_cache']));
+        }
 
         $openplatformOauthApiClientDefinition = $container->getDefinition('DanskernesDigitaleBibliotek\AgencyAuthBundle\Openplatform\OpenplatformOauthApiClient');
         $openplatformOauthApiClientDefinition->setArgument(0, $config['openplatform_id']);
