@@ -35,8 +35,7 @@ class OpenPlatformUserProvider implements UserProviderInterface
         private readonly OpenplatformOauthApiClient $openplatformOauthApiClient,
         private readonly Logger $logger,
         private readonly ?AdapterInterface $cache = null
-    )
-    {
+    ) {
         $this->allowedClients = empty($openplatformAllowedClients) ? [] : array_map('trim', explode(',', $openplatformAllowedClients));
     }
 
