@@ -25,6 +25,5 @@ class BundleTest extends TestCase
 
         $tokenAuthenticator = $container->get('ddb.agency_token_auth');
         $this->assertInstanceOf(TokenAuthenticator::class, $tokenAuthenticator);
-        $this->assertFalse($tokenAuthenticator->supportsRememberMe());
     }
 }

@@ -60,35 +60,31 @@ Then set the actuel values in your `.env.local`. (See [configuration based on en
 
 ## Security Configuration
 
-Configure firewalls, access control and roles according to your needs in your `config/packages/security.yml`. The bundle provides a `TokenAuthenticator` you can use as a [Symfony Guard](https://symfony.com/doc/4.4/security/guard_authentication.html).
-If authenticated it will return a `User` with the `ROLE_OPENPLATFORM_AGENCY`. You can use Symfonys [hierarchical roles](https://symfony.com/doc/4.4/security.html#hierarchical-roles)
+Configure firewalls, access control and roles according to your needs in your `config/packages/security.yml`. The bundle provides a `TokenAuthenticator` you can use as a [custom authenticator](https://symfony.com/doc/current/security/custom_authenticator.html) and a `OpenPlatformUserProvider` you can use as a [custom user provider](https://symfony.com/doc/current/security/user_providers.html#creating-a-custom-user-provider).
+If authenticated it will return a [self validating passport](https://symfony.com/doc/current/security/custom_authenticator.html#self-validating-passport) with a `User` with the `ROLE_OPENPLATFORM_AGENCY`. You can use Symfonys [hierarchical roles](https://symfony.com/doc/4.4/security.html#hierarchical-roles)
 to map this role to your applications roles.
 
 A working security configuration could be:
 
 ```yaml
 security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: null }
-
+        openplatform_provider:
+            id: DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\OpenPlatformUserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        api:
-            pattern: ^/api
-            stateless: true
-            anonymous: lazy
-            guard:
-                authenticators:
-                    - DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\TokenAuthenticator
         main:
-            anonymous: true
+            stateless: true
+            custom_authenticators:
+                - DanskernesDigitaleBibliotek\AgencyAuthBundle\Security\TokenAuthenticator
 
     access_control:
         # Allows accessing the Swagger UI
         - { path: '^/api/docs', roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: '^/api', roles: ROLE_OPENPLATFORM_AGENCY }
+        - { path: '^/api', roles: ROLE_API_USER }
 
     role_hierarchy:
         ROLE_OPENPLATFORM_AGENCY: [ROLE_API_USER, ROLE_ENTRY_READ]

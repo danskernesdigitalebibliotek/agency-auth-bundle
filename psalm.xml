@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="3"
+    errorLevel="1"
     resolveFromConfigFile="true"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns="https://getpsalm.org/schema/config"
     xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
-    errorBaseline="psalm-baseline.xml"
 >
     <projectFiles>
         <directory name="src" />
@@ -13,4 +12,33 @@
             <directory name="vendor" />
         </ignoreFiles>
     </projectFiles>
+
+    <issueHandlers>
+        <PossiblyUndefinedMethod>
+            <errorLevel type="suppress">
+                <referencedMethod name="NodeDefinition::children"/>
+                <file name="src/DependencyInjection/Configuration.php"/>
+            </errorLevel>
+        </PossiblyUndefinedMethod>
+        <MissingConstructor>
+            <errorLevel type="suppress">
+                <file name="src/Security/User.php"/>
+            </errorLevel>
+        </MissingConstructor>
+        <MixedReturnStatement>
+            <errorLevel type="suppress">
+                <file name="src/DanskernesDigitaleBibliotekAgencyAuthBundle.php"/>
+            </errorLevel>
+        </MixedReturnStatement>
+        <MixedInferredReturnType>
+            <errorLevel type="suppress">
+                <file name="src/DanskernesDigitaleBibliotekAgencyAuthBundle.php"/>
+            </errorLevel>
+        </MixedInferredReturnType>
+        <MixedMethodCall>
+            <errorLevel type="suppress">
+                <file name="src/DependencyInjection/Configuration.php"/>
+            </errorLevel>
+        </MixedMethodCall>
+    </issueHandlers>
 </psalm>

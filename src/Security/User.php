@@ -13,14 +13,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-    private ?string $password;
     private ?\DateTime $expires;
     private string $agency;
+    private bool $active = false;
     private string $authType;
     private string $clientId;
+    private ?string $token;
 
     /**
-     * Get this users "password" expire date.
+     * Get the users "password" expire date.
      */
     public function getExpires(): ?\DateTime
     {
@@ -28,7 +29,7 @@ class User implements UserInterface
     }
 
     /**
-     * Set this users "password" expire date.
+     * Set the users "password" expire date.
      */
     public function setExpires(\DateTime $expires): void
     {
@@ -36,15 +37,25 @@ class User implements UserInterface
     }
 
     /**
-     * Get the users agency.
+     * Get the user's agency.
      */
     public function getAgency(): string
     {
         return $this->agency;
     }
 
+    public function isActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
+    }
+
     /**
-     * Set the users agency.
+     * Set the user's agency.
      */
     public function setAgency(string $agency): void
     {
@@ -94,38 +105,6 @@ class User implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function getPassword(): ?string
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param string $password
-     */
-    public function setPassword($password): void
-    {
-        $this->password = $password;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSalt(): ?string
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUsername(): string
-    {
-        return $this->agency;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getUserIdentifier(): string
     {
         return $this->agency;
@@ -134,8 +113,24 @@ class User implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function eraseCredentials(): ?string
+    public function eraseCredentials(): void
     {
-        return null;
+        $this->token = null;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param ?string $token
+     */
+    public function setToken(?string $token): void
+    {
+        $this->token = $token;
     }
 }
